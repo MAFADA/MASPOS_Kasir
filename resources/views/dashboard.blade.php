@@ -30,7 +30,7 @@
             <div x-data="productFilter()" x-init="fetchProducts(1)" class="max-w-screen-xl mx-auto p-5 sm:p-10 md:p-16">
 
                 {{-- FILTERS --}}
-                <div class="border-b mb-5 flex justify-between text-sm">
+                <div class="border-b mb-5 flex justify-start text-sm">
                     @foreach ($categories as $category)
                         <button
                             class="text-indigo-600 flex items-center pb-2 pr-2 border-b-2 border-indigo-600 uppercase font-semibold"
