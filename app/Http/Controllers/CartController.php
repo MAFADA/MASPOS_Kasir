@@ -101,5 +101,22 @@ class CartController extends Controller
         return response()->json(['success' => 'Cart updated successfully']);
     }
 
+    public function remove(Request $request)
+    {
+        // \Log::info('Request Method: ' . $request->method());
+        // \Log::info('Request Headers:', $request->headers->all());
+        // \Log::info('Request Data:', $request->all());
 
+        $cart = session()->get('cart', []);
+
+        $productID = $request->productID;
+
+        if (isset($productID) && isset($cart[$productID])) {
+            unset($cart[$productID]);
+        }
+
+        session()->put('cart', $cart);
+
+        return response()->json(['success' => 'Item removed successfully', 'log' => $request->productID]);
+    }
 }

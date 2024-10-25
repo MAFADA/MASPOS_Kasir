@@ -22,7 +22,7 @@ Route::delete('/product/delete/{id}', [ProductController::class, 'delete'])->nam
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 Route::post('/cart/add/{id}', [CartController::class, 'store'])->name('cart.store');
 Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::delete('/cart/delete', [CartController::class, 'delete'])->name('cart.delete');
+Route::delete('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 Route::get('/payment-success', [CartController::class, 'showPayementSuccess'])->name('cart.paymentSuccess');
 
