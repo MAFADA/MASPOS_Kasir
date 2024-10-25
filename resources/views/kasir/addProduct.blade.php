@@ -19,7 +19,8 @@
                                         </div>
                                         <div
                                             class="relative w-4/5 h-32 max-w-xs mb-10 bg-gray-100 rounded-lg shadow-inner">
-                                            <input type="file" id="file-upload" name="image" class="hidden">
+                                            <input type="file" id="file-upload" name="image" class="hidden"
+                                                onchange="previewImage(event)">
                                             <label for="file-upload"
                                                 class="z-20 flex flex-col-reverse items-center justify-center w-full h-full cursor-pointer">
                                                 <p class="z-10 text-xs font-light text-center text-gray-500">Drag & Drop
@@ -31,6 +32,8 @@
                                                     </path>
                                                 </svg>
                                             </label>
+                                            <img src="#" alt="Preview" id="image-preview"
+                                                class="hidden absolute top-0 left-0 w-full h-full object-cover rounded-lg">
                                         </div>
                                     </div>
                                 </div>
@@ -101,4 +104,19 @@
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+    <script>
+        function previewImage(event) {
+            const image = event.target;
+            const preview = document.getElementById('image-preview');
+
+            if (image.files && image.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                }
+                reader.readAsDataURL(image.files[0]);
+            }
+        }
+    </script>
 </x-app-layout>
