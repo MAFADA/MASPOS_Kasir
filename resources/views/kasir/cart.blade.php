@@ -4,8 +4,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-100 h-screen py-8">
                 <div class="container mx-auto px-4">
-                    <div class="flex flex-col md:flex-row gap-4">
-                        <div class="md:w-3/4" x-data="cartData({{ json_encode($cart, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) }})">
+                    <div class="flex flex-col md:flex-row gap-4" x-data="cartData({{ json_encode($cart, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) }})">
+                        <div class="md:w-3/4">
 
                             <div class="bg-white rounded-lg shadow-md p-6 mb-4">
                                 <table class="w-full">
@@ -46,20 +46,20 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="md:w-1/4">
-                                <div class="bg-white rounded-lg shadow-md p-6">
-                                    <h2 class="text-lg font-semibold mb-4">Summary</h2>
 
-                                    <div class="flex justify-between mb-2">
-                                        <span class="font-semibold">Total</span>
-                                        <span class="font-semibold" x-text="`Rp. ${totalPrice}`"></span>
-                                    </div>
-                                    <button
-                                        class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
+                        </div>
+                        <div class="md:w-1/4">
+                            <div class="bg-white rounded-lg shadow-md p-6">
+                                <h2 class="text-lg font-semibold mb-4">Summary</h2>
+
+                                <div class="flex justify-between mb-2">
+                                    <span class="font-semibold">Total</span>
+                                    <span class="font-semibold" x-text="`Rp. ${totalPrice}`"></span>
                                 </div>
+                                <button
+                                    class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
