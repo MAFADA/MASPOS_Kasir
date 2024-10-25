@@ -14,7 +14,7 @@ Route::get('/', function () {
 Route::get('/category', [CategoryController::class, 'create'])->name('category.create');
 Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
 
-Route::get('/dashboard', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard/{category?}', [ProductController::class, 'index'])->name('dashboard');
 Route::get('/product', [ProductController::class, 'create'])->name('product.create');
 Route::post('/product', [ProductController::class, 'store'])->name('product.store');
 

@@ -8,16 +8,27 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, $category = null)
     {
+        if (!auth()->check() && $request->expectsJson()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $categories = Category::all();
+
         $data = Product::query();
 
-        if ($request->has('category_id') && $request->category != '') {
-            $data->where('category_id', $request->category_id);
+        if ($category) {
+            $data->where('category_id', $category);
         }
 
         $products = $data->get();
-        return response()->json($products);
+
+        if ($request->expectsJson()) {
+            return response()->json($products);
+        }
+
+        return view('dashboard', compact('products', 'categories'));
     }
 
     public function create()
