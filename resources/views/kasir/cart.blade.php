@@ -89,6 +89,7 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
+                                console.log('Updated item:', this.cart[productID]);
                                 this.cart[productID].qty = quantity;
                             }
                         })

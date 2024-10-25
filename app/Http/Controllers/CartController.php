@@ -23,9 +23,17 @@ class CartController extends Controller
             return redirect()->back()->with('error', 'Cart is empty!');
         }
 
+        // dd($cart);
+
+        $totalPricePayment = array_reduce($cart, function ($total, $item) {
+            return $total + ($item['price'] * $item['qty']);
+        }, 0);
+
+
+
         $order = Order::create([
             'UID' => auth()->id(),
-            'total' => array_reduce($cart, fn($sum, $item) => $sum + ($item['price'] * $item['qty']), 0)
+            'total' => $totalPricePayment
         ]);
 
         foreach ($cart as $productID => $item) {
@@ -36,18 +44,14 @@ class CartController extends Controller
             ]);
         }
 
-        $totalPricePayment = array_reduce($cart, function ($total, $item) {
-            return $total + ($item['price'] * $item['qty']);
-        }, 0);
-
         session()->forget('cart');
 
-        return redirect()->route('cart.paymentSuccess')->with('totalPricePayment', $totalPricePayment);
+        return redirect()->route('cart.paymentSuccess', ['totalPricePayment' => $totalPricePayment]);
     }
 
-    public function showPayementSuccess()
+    public function showPayementSuccess(Request $request)
     {
-        $totalPricePayment = session('totalPricePayment');
+        $totalPricePayment = $request->query('totalPricePayment', 0);
         return view('kasir.paymentSuccess', compact('totalPricePayment'));
     }
 
