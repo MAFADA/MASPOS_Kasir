@@ -20,7 +20,7 @@
 
                     Add Products
                 </a>
-                <a href="{{ route('cart.create') }}"
+                <a href="{{ route('cart.show') }}"
                     class="inline-flex items-center px-4 py-2 bg-blue-800 border border-transparent rounded-md font-semibold text-xs text-white tracking-widest hover:bg-blue-800 focus:bg-blue-800 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150'">
                     Cart
                 </a>
@@ -54,12 +54,12 @@
                                         class="hover:bg-transparent transition duration-300 absolute bottom-0 top-0 right-0 left-0 bg-gray-900 opacity-25">
                                     </div>
                                 </a>
-                                <a href="#">
+                                {{-- <a href="#">
                                     <div
                                         class="text-xs absolute top-0 right-0 bg-indigo-600 px-4 py-2 text-white mt-3 mr-3 hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out">
                                         Cooking
                                     </div>
-                                </a>
+                                </a> --}}
                             </div>
                             <div class="px-4 py-4 mb-auto">
                                 <div class="flex justify-between">
@@ -76,13 +76,12 @@
 
                                     </button>
                                 </div>
-                                <p class="text-black font-bold text-lg" x-text="product.price">
+                                <span>Rp. <p class="text-black font-bold text-lg" x-text="product.price"></p></span>
 
-                                </p>
                             </div>
                             <div class="px-6 py-3 flex flex-row items-center justify-center bg-gray-100">
 
-                                <button
+                                <button @click="addToCart(product.id)"
                                     class="inline-flex items-center px-4 py-2 bg-blue-800 rounded-md font-semibold text-xs text-white">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="size-3">
@@ -128,6 +127,21 @@
                             this.products = data;
                         })
                         .catch(error => console.error('Error fetching products:', error));
+                },
+
+                addToCart(productID) {
+                    fetch(`/cart/add/${productID}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.success);
+                        })
+                        .catch(error => console.error('Error adding to cart:', error));
                 }
             };
         }

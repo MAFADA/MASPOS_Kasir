@@ -1,11 +1,12 @@
 <x-app-layout>
+
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-100 h-screen py-8">
                 <div class="container mx-auto px-4">
-                    <h1 class="text-2xl font-semibold mb-4">Shopping Cart</h1>
                     <div class="flex flex-col md:flex-row gap-4">
-                        <div class="md:w-3/4">
+                        <div class="md:w-3/4" x-data="cartData({{ json_encode($cart, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) }})">
+
                             <div class="bg-white rounded-lg shadow-md p-6 mb-4">
                                 <table class="w-full">
                                     <thead>
@@ -17,25 +18,31 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="py-4">
-                                                <div class="flex items-center">
-                                                    <img class="h-16 w-16 mr-4" src="https://via.placeholder.com/150"
-                                                        alt="Product image">
-                                                    <span class="font-semibold">Product name</span>
-                                                </div>
-                                            </td>
-                                            <td class="py-4">$19.99</td>
-                                            <td class="py-4">
-                                                <div class="flex items-center">
-                                                    <button class="border rounded-md py-2 px-4 mr-2">-</button>
-                                                    <span class="text-center w-8">1</span>
-                                                    <button class="border rounded-md py-2 px-4 ml-2">+</button>
-                                                </div>
-                                            </td>
-                                            <td class="py-4">$19.99</td>
-                                        </tr>
-                                        <!-- More product rows -->
+                                        <template x-for="(item,id) in cart" :key="id">
+                                            <tr>
+                                                <td class="py-4">
+                                                    <div class="flex items-center">
+                                                        <img class="h-16 w-16 mr-4"
+                                                            :src="`{{ asset('storage') }}/${item.image}`"
+                                                            alt="Product image">
+                                                        <span x-text="item.name" class="font-semibold"></span>
+                                                    </div>
+                                                </td>
+                                                <td x-text="`Rp. ${item.price}`" class="py-4"></td>
+                                                <td class="py-4">
+                                                    <div class="flex items-center">
+                                                        <button @click="updateQuantity(id, item.qty-1)"
+                                                            class="border rounded-md py-2 px-4 mr-2"
+                                                            :disabled="item.qty <= 1">-</button>
+                                                        <span class="text-center w-8" x-text="item.qty"></span>
+                                                        <button @click="updateQuantity(id, item.qty+1)"
+                                                            class="border rounded-md py-2 px-4 ml-2">+</button>
+                                                    </div>
+                                                </td>
+                                                <td class="py-4" x-text="`Rp. ${item.price * item.qty}`"></td>
+                                            </tr>
+                                        </template>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -57,4 +64,38 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function cartData(initCart) {
+            return {
+
+                cart: initCart,
+                get totalPrice() {
+                    return Object.values(this.cart).reduce((acc, item) => acc + (item.price * item.qty), 0);
+                },
+                updateQuantity(productID, quantity) {
+                    if (quantity < 1) return;
+
+                    fetch(`/cart/update`, {
+                            method: 'PATCH',
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            },
+                            body: JSON.stringify({
+                                productId: productID,
+                                qty: quantity
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                this.cart[productID].qty = quantity;
+                            }
+                        })
+                        .catch(error => console.error('Error updating cart:', error));
+                }
+            }
+        }
+    </script>
 </x-app-layout>
