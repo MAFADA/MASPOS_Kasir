@@ -65,4 +65,15 @@ class ProductController extends Controller
             return redirect()->back()->with('error', 'Add product failed, please try again');
         }
     }
+
+    public function delete($id)
+    {
+        $product = Product::find($id);
+        if ($product) {
+            $product->delete();
+            return response()->json(['success' => 'Product deleted successfully.']);
+        }
+        return response()->json(['error' => 'Product not found.']);
+
+    }
 }

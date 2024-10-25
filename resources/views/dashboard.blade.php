@@ -66,7 +66,7 @@
                                     <a href="#"
                                         class="font-normal text-sm inline-block hover:text-indigo-600 transition duration-500 ease-in-out mb-2"
                                         x-text="product.product_name"></a>
-                                    <button
+                                    <button @click="deleteProduct(product.id)"
                                         class="inline-flex items-center px-1 py-1 bg-red-700 rounded-lg text-xs text-white ">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-4">
@@ -142,6 +142,24 @@
                             alert(data.success);
                         })
                         .catch(error => console.error('Error adding to cart:', error));
+                },
+
+                deleteProduct(productID) {
+                    if (confirm('Are you sure you want to delete this product?')) {
+                        fetch(`/product/delete/${productID}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                alert(data.success);
+                                this.fetchProducts(1);
+                            })
+                            .catch(error => console.error('Error deleting product:', error));
+                    }
                 }
             };
         }
