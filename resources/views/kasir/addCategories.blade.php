@@ -21,12 +21,15 @@
                         </div>
 
                         <div class="flex items-center space-x-4 justify-end mt-4">
-                            <x-primary-button class="ms-3">
+                            <a href="{{ route('dashboard') }}"
+                                class="ms-3 px-4 py-2 border-solid border-2 border-[#1963D2] rounded-md text-base text-[#1963D2] font-semibold"
+                                type="button">
                                 {{ __('Cancel') }}
-                            </x-primary-button>
-                            <x-primary-button class="ms-3">
+                            </a>
+                            <button type="submit"
+                                class="ms-3 inline-flex items-center px-4 py-2 bg-blue-800 border border-transparent rounded-md font-semibold text-base text-white tracking-widest hover:bg-blue-800 focus:bg-blue-800 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                 {{ __('Confirm') }}
-                            </x-primary-button>
+                            </button>
                         </div>
                     </form>
                 </div>
