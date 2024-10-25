@@ -26,7 +26,6 @@ class CategoryController extends Controller
             return redirect()->route('dashboard')->with('success', 'Add category successfully');
 
         } catch (\Exception $e) {
-            dd($e);
             return redirect()->back()->with('error', 'Add category failed, please try again');
         }
 

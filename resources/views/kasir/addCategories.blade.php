@@ -27,7 +27,7 @@
                                 {{ __('Cancel') }}
                             </a>
                             <button type="submit"
-                                class="ms-3 inline-flex items-center px-4 py-2 bg-blue-800 border border-transparent rounded-md font-semibold text-base text-white tracking-widest hover:bg-blue-800 focus:bg-blue-800 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                class="ms-3 inline-flex items-center px-4 py-2 bg-[#1963D2] border border-transparent rounded-md font-semibold text-base text-white tracking-widest hover:bg-[#1963D2] focus:bg-[#1963D2] active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                                 {{ __('Confirm') }}
                             </button>
                         </div>
