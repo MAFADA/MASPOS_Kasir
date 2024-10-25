@@ -45,6 +45,7 @@ class CartController extends Controller
         }
 
         session()->forget('cart');
+        session()->forget('totalBill');
 
         return redirect()->route('cart.paymentSuccess', ['totalPricePayment' => $totalPricePayment]);
     }
@@ -73,7 +74,14 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
 
-        return response()->json(['success' => 'Product added to cart successfully!']);
+        $totalBill = 0;
+        foreach ($cart as $item) {
+            $totalBill += $item['price'] * $item['qty'];
+        }
+
+        session()->put('totalBill', $totalBill);
+
+        return response()->json(['success' => 'Product added to cart successfully!', 'totalBill' => $totalBill]);
     }
 
     public function update(Request $request)

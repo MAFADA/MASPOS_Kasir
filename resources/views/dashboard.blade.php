@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="py-10">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div x-data="productFilter()" x-init="fetchProducts(1)" class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             {{-- CRUD BUTTON --}}
             <div class="flex justify-end gap-3 overflow-hidden shadow-sm sm:rounded-lg">
                 <a href="{{ route('category.create') }}"
@@ -27,7 +27,7 @@
             </div>
 
             {{-- PRODUCTS --}}
-            <div x-data="productFilter()" x-init="fetchProducts(1)" class="max-w-screen-xl mx-auto p-5 sm:p-10 md:p-16">
+            <div class="max-w-screen-xl mx-auto p-5 sm:p-10 md:p-16">
 
                 {{-- FILTERS --}}
                 <div class="border-b mb-5 flex justify-start text-sm">
@@ -100,7 +100,7 @@
             <div class="flex justify-center lg:justify-end md:justify-end sm:justify-end content-center">
                 <div
                     class="bg-[#1963D2] w-52 h-14 rounded-lg text-white font-semibold text-center flex justify-center items-center">
-                    Total Bill : Rp 1.000.000
+                    Total Bill : Rp. <span x-text="totalBill"></span>
                 </div>
             </div>
         </div>
@@ -110,6 +110,7 @@
         function productFilter() {
             return {
                 products: [],
+                totalBill: 0,
                 fetchProducts(categoryId = null) {
                     let url = categoryId ? `dashboard/${categoryId}` : `/dashboard`;
                     fetch(`/dashboard/${categoryId}`, {
@@ -139,6 +140,7 @@
                         })
                         .then(response => response.json())
                         .then(data => {
+                            this.totalBill = {{ session()->get('totalBill', 0) }};
                             alert(data.success);
                         })
                         .catch(error => console.error('Error adding to cart:', error));
