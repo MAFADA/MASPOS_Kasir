@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,42 @@ class CartController extends Controller
         $cart = session()->get('cart', []);
         // dd($cart);
         return view('kasir.cart', compact('cart'));
+    }
+
+    public function checkout()
+    {
+        $cart = session()->get('cart', []);
+
+        if (empty($cart)) {
+            return redirect()->back()->with('error', 'Cart is empty!');
+        }
+
+        $order = Order::create([
+            'UID' => auth()->id(),
+            'total' => array_reduce($cart, fn($sum, $item) => $sum + ($item['price'] * $item['qty']), 0)
+        ]);
+
+        foreach ($cart as $productID => $item) {
+            $order->order_products()->create([
+                'product_id' => $productID,
+                'qty' => $item['qty'],
+                'price' => $item['price'],
+            ]);
+        }
+
+        $totalPricePayment = array_reduce($cart, function ($total, $item) {
+            return $total + ($item['price'] * $item['qty']);
+        }, 0);
+
+        session()->forget('cart');
+
+        return redirect()->route('cart.paymentSuccess')->with('totalPricePayment', $totalPricePayment);
+    }
+
+    public function showPayementSuccess()
+    {
+        $totalPricePayment = session('totalPricePayment');
+        return view('kasir.paymentSuccess', compact('totalPricePayment'));
     }
 
     public function store(Request $request, $productID)

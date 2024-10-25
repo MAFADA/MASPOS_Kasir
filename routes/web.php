@@ -23,7 +23,8 @@ Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 Route::post('/cart/add/{id}', [CartController::class, 'store'])->name('cart.store');
 Route::patch('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/delete', [CartController::class, 'delete'])->name('cart.delete');
-
+Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+Route::get('/payment-success', [CartController::class, 'showPayementSuccess'])->name('cart.paymentSuccess');
 
 
 Route::middleware('auth')->group(function () {

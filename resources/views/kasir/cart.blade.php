@@ -6,7 +6,6 @@
                 <div class="container mx-auto px-4">
                     <div class="flex flex-col md:flex-row gap-4" x-data="cartData({{ json_encode($cart, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) }})">
                         <div class="md:w-3/4">
-
                             <div class="bg-white rounded-lg shadow-md p-6 mb-4">
                                 <table class="w-full">
                                     <thead>
@@ -46,7 +45,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
                         <div class="md:w-1/4">
                             <div class="bg-white rounded-lg shadow-md p-6">
@@ -56,8 +54,8 @@
                                     <span class="font-semibold">Total</span>
                                     <span class="font-semibold" x-text="`Rp. ${totalPrice}`"></span>
                                 </div>
-                                <button
-                                    class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
+                                <button class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full"
+                                    @click="checkout()">Checkout</button>
                             </div>
                         </div>
                     </div>
@@ -95,6 +93,20 @@
                             }
                         })
                         .catch(error => console.error('Error updating cart:', error));
+                },
+                checkout() {
+                    fetch('/checkout', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            }
+                        })
+                        .then(response => {
+                            if (response.redirected) {
+                                window.location.href = response.url;
+                            }
+                        })
+                        .catch(error => console.error('Error during checkout:', error));
                 }
             }
         }
